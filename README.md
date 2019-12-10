@@ -33,7 +33,9 @@ we have implemented the following:
    pressing the bottom left button will increase the current
    selection.
 
-Thus all of the seven requirements were implemented.
+Thus all of the seven requirements were implemented with the caveat
+that with Req 6 the alarm can be set and disabled, but the screen does
+not blink at alarm time.
 
 We also created a simple finite state machine (FSM) diagram that shows
 the different state machines used in the implementation of the digital
