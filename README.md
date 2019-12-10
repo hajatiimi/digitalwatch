@@ -13,14 +13,14 @@ assignment. The assignment's behavioral requirements for the digital
 watch describe seven different requirements. Out of the requirements,
 we have implemented the following:
 
- * Req 1: Time value is updated every second.
+ * Req 1: Time value is updated every second unless it is being edited.
 
- * Req 2: Pressing the top right button turns on the background light.
+ * Req 2: Pressing the top right button turns on the background light. The light stays on for 2 seconds after the button is released.
 
  * Req 3: Pressing the top left button alternates between the chrono
    and the time display modes.
 
- * Req 4: When in chrono display mode, the elapsed time is displayed MM:SS:FF.
+ * Req 4: The chrono mode works as specified.
 
  * Req 5: When in time display mode, the watch will go into time
    editing mode when the bottom right button is held pressed for at
@@ -35,7 +35,7 @@ we have implemented the following:
 
 Thus all of the seven requirements were implemented with the caveat
 that with Req 6 the alarm can be set and disabled, but the screen does
-not blink at alarm time.
+not blink at alarm time. Current selection can't be changed in edit mode but this feature was never required.  
 
 We also created a simple finite state machine (FSM) diagram that shows
 the different state machines used in the implementation of the digital
