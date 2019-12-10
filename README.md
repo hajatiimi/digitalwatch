@@ -22,6 +22,19 @@ we have implemented the following:
 
  * Req 4: When in chrono display mode, the elapsed time is displayed MM:SS:FF.
 
+ * Req 5: When in time display mode, the watch will go into time
+   editing mode when the bottom right button is held pressed for at
+   least 1.5 seconds.
+
+ * Req 6: When in time display mode, the alarm can be displayed and
+   toggled between on or off by pressing the bottom left button.
+
+ * Req 7: When in (either time or alarm) editing mode, briefly
+   pressing the bottom left button will increase the current
+   selection.
+
+Thus all of the seven requirements were implemented.
+
 We also created a simple finite state machine (FSM) diagram that shows
 the different state machines used in the implementation of the digital
 watch, and the supported transitionst that "make the digital watch
