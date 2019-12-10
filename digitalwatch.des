@@ -25,6 +25,7 @@ STATECHART:
     Display [DS]
         Time [DS]
         Chrono
+        Alarm
     EditMode [DS]
         False [DS]
         True
@@ -40,14 +41,10 @@ STATECHART:
     IncrementTimer [DS]
         Idle [DS]
         Running
+    EnterAlarmEditTimer [DS]
+        Idle [DS]
+        Running
 
-# TRANSITION: Yksittäinen tilasiirtymä
-#     S: A    Lähtötila
-#     N: B    Lopputila
-#     E: e    Tapahtuman nimi, GUI-tiedostossa .event("nimi")
-#     O: koodi tähän
-#        
-# 
 
 TRANSITION:
     S:  Clock.Running 
@@ -85,8 +82,9 @@ TRANSITION:
 TRANSITION:
     S:  Display.Time
     N:  Display.Time
-    T:  1
+    T:  0.25
     O:  gui.refreshTimeDisplay() 
+        gui.refreshDateDisplay()
 
 TRANSITION:
     S:  Display.Chrono
@@ -105,6 +103,25 @@ TRANSITION:
     N:  Display.Time
     E:  changeMode
     O:  gui.refreshTimeDisplay()
+
+TRANSITION:
+    S: Display.Alarm
+    N: Display.Alarm
+    T: 0.25
+    O: gui.refreshAlarmDisplay()
+
+TRANSITION:
+    S:  Display.Time
+    N:  Display.Alarm
+    E:  setAlarm
+    O:  gui.refreshAlarmDisplay()
+        gui.setAlarm()
+        gui.eventhandler.event("startEnterAlarmEditTimer")
+
+TRANSITION:
+    S: Display.Alarm
+    N: Display.Time
+    E: exitAlarmDisplay
 
 TRANSITION:
     S:  Chrono.Running
@@ -186,7 +203,16 @@ TRANSITION:
 TRANSITION:
     S: EditMode.True
     N: EditMode.False
+    C: [INSTATE("Display.Time")]
     E: leaveEditMode
+
+
+TRANSITION:
+    S: EditMode.True
+    N: EditMode.False
+    C: [INSTATE("Display.Alarm")]
+    E: leaveEditMode
+    O: gui.eventhandler.event("exitAlarmDisplay")
 
 TRANSITION:
     S: EditTimeout.Idle
@@ -227,16 +253,28 @@ TRANSITION:
         gui.eventhandler.event("resetEditTimeoutTimer")
 
 TRANSITION:
-    S: IncrementTimer.Running
-    N: IncrementTimer.Idle
-    E: stopInc
+    S:  IncrementTimer.Running
+    N:  IncrementTimer.Idle
+    E:  stopInc
 
-# editTime
-# finishEdit
-# released
-# resetChrono
-# increase
-# setAlarm
-# stopInc
-# onoff
+TRANSITION:
+    S:  EnterAlarmEditTimer.Idle
+    N:  EnterAlarmEditTimer.Running
+    E:  startEnterAlarmEditTimer
+
+TRANSITION:
+    S:  EnterAlarmEditTimer.Running
+    N:  EnterAlarmEditTimer.Idle
+    T:  1.5
+    O:  gui.startSelection()
+        gui.eventhandler.event("enterEditMode")
+        gui.eventhandler.event("startEditTimeoutTimer")
+
+TRANSITION:
+    S: EnterAlarmEditTimer.Running
+    N: EnterAlarmEditTimer.Idle
+    E: onoff
+    O: gui.eventhandler.event("exitAlarmDisplay")
+    
+
 # alarming
