@@ -1,0 +1,56 @@
+INITIALIZER:
+    from Tkinter import *
+    from DWatchGUI import DWatchGUI
+    
+    root = Tk()
+    topLevel = Toplevel(root)
+    topLevel.resizable(width="NO", height="NO")
+    topLevel.title("DWatch")
+    gui = DWatchGUI(topLevel,eventhandler)
+    eventhandler.start()
+    root.mainloop()
+    exit()
+
+STATECHART:
+    A [DS]
+    B
+
+# TRANSITION: Yksittäinen tilasiirtymä
+#     S: A    Lähtötila
+#     N: B    Lopputila
+#     E: e    Tapahtuman nimi, GUI-tiedostossa .event("nimi")
+#     O: koodi tähän
+#        
+# 
+
+TRANSITION:
+    S:  A
+    N:  B
+    E:  lightOn
+    O:  print "A -> B"
+        gui.setIndiglo()
+       
+
+TRANSITION:
+    S: B
+    N: A
+    E: lightOff
+    O:  print "B -> A"
+        gui.unsetIndiglo()
+
+
+# lightOn
+# lightOff
+# changeMode
+# initChrono
+# editTime
+# finishEdit
+# released
+# resetChrono
+# increase
+# setAlarm
+
+# stopInc
+# onoff
+
+# alarming
