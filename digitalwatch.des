@@ -15,6 +15,10 @@ STATECHART:
     Clock [DS]
         Running [DS]
         Stopped
+    Backlight [DS]
+        On
+        Wait
+        Off [DS]
 
 # TRANSITION: Yksittäinen tilasiirtymä
 #     S: A    Lähtötila
@@ -25,25 +29,28 @@ STATECHART:
 # 
 
 TRANSITION:
-    S: Clock.Running 
-    N: Clock.Running 
-    T: 1
-    O: gui.increaseTimeByOne()
+    S:  Clock.Running 
+    N:  Clock.Running 
+    T:  1
+    O:  gui.increaseTimeByOne()
 
 TRANSITION:
-    S:  Clock
-    N:  Clock
+    S:  Backlight.Off
+    N:  Backlight.On
     E:  lightOn
-    O:  print "A -> B"
-        gui.setIndiglo()
-       
+    O:  gui.setIndiglo()
+
 
 TRANSITION:
-    S: Clock
-    N: Clock
-    E: lightOff
-    O:  print "B -> A"
-        gui.unsetIndiglo()
+    S:  Backlight.On
+    N:  Backlight.Wait
+    E:  lightOff
+
+TRANSITION:
+    S:  Backlight.Wait
+    N:  Backlight.Off
+    T:  2 [OTT]
+    O:  gui.unsetIndiglo()
 
 
 # lightOn
