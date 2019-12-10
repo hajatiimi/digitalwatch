@@ -25,6 +25,21 @@ STATECHART:
     Display [DS]
         Time [DS]
         Chrono
+    EditMode [DS]
+        False [DS]
+        True
+    TimeEditTimer [DS]
+        Idle [DS]
+        Running
+    EditTimeout [DS]
+        Idle [DS]
+        Running
+    EditExitTimer [DS]
+        Idle [DS]
+        Running
+    IncrementTimer [DS]
+        Idle [DS]
+        Running
 
 # TRANSITION: Yksittäinen tilasiirtymä
 #     S: A    Lähtötila
@@ -40,6 +55,15 @@ TRANSITION:
     T:  1
     O:  gui.GUI.increaseTimeByOne()
 
+TRANSITION:
+    S:  Clock.Running
+    N:  Clock.Stopped
+    E:  stopTime
+
+TRANSITION:
+    S:  Clock.Stopped
+    N:  Clock.Running
+    E:  startTime
 
 TRANSITION:
     S:  Backlight.Off
@@ -61,26 +85,26 @@ TRANSITION:
 TRANSITION:
     S:  Display.Time
     N:  Display.Time
-    T: 1
-    O: gui.refreshTimeDisplay() 
+    T:  1
+    O:  gui.refreshTimeDisplay() 
 
 TRANSITION:
-    S: Display.Chrono
-    N: Display.Chrono
-    T: 0.25
-    O: gui.refreshChronoDisplay()
+    S:  Display.Chrono
+    N:  Display.Chrono
+    T:  0.25
+    O:  gui.refreshChronoDisplay()
 
 TRANSITION:
-    S: Display.Time
-    N: Display.Chrono
-    E: changeMode
-    O: gui.refreshChronoDisplay()
+    S:  Display.Time
+    N:  Display.Chrono
+    E:  changeMode
+    O:  gui.refreshChronoDisplay()
 
 TRANSITION:
-    S: Display.Chrono
-    N: Display.Time
-    E: changeMode
-    O: gui.refreshTimeDisplay()
+    S:  Display.Chrono
+    N:  Display.Time
+    E:  changeMode
+    O:  gui.refreshTimeDisplay()
 
 TRANSITION:
     S:  Chrono.Running
@@ -114,7 +138,99 @@ TRANSITION:
     C:  [INSTATE("Display.Chrono")]
     O:  gui.resetChrono()
 
-# initChrono
+TRANSITION:
+    S:  TimeEditTimer.Idle
+    N:  TimeEditTimer.Running
+    C:  [INSTATE("EditMode.False")]
+    E:  editTime
+
+TRANSITION:
+    S:  TimeEditTimer.Running
+    N:  TimeEditTimer.Idle
+    T:  1.5
+    O:  gui.startSelection()
+        gui.eventhandler.event("stopTime")
+        gui.eventhandler.event("enterEditMode")
+        gui.eventhandler.event("startEditTimeoutTimer")
+
+TRANSITION: 
+    S:  TimeEditTimer.Running
+    N:  TimeEditTimer.Idle
+    E:  released
+
+TRANSITION:
+    S:  EditExitTimer.Idle
+    N:  EditExitTimer.Running
+    C:  [INSTATE("EditMode.True")]
+    E:  finishEdit
+
+TRANSITION:
+    S:  EditExitTimer.Running
+    N:  EditExitTimer.Idle
+    T:  2
+    O:  gui.stopSelection()
+        gui.eventhandler.event("startTime")
+        gui.eventhandler.event("leaveEditMode")
+        gui.eventhandler.event("stopEditTimeoutTimer")
+
+TRANSITION:
+    S:  EditExitTimer.Running
+    N:  EditExitTimer.Idle
+    E:  released
+
+TRANSITION:
+    S: EditMode.False
+    N: EditMode.True
+    E: enterEditMode
+
+TRANSITION:
+    S: EditMode.True
+    N: EditMode.False
+    E: leaveEditMode
+
+TRANSITION:
+    S: EditTimeout.Idle
+    N: EditTimeout.Running
+    E: startEditTimeoutTimer
+
+TRANSITION:
+    S:  EditTimeout.Running
+    N:  EditTimeout.Idle
+    T:  5
+    O:  gui.stopSelection()
+        gui.eventhandler.event("startTime")
+        gui.eventhandler.event("leaveEditMode")
+
+TRANSITION:
+    S:  EditTimeout.Running
+    N:  EditTimeout.Idle
+    E:  stopEditTimeoutTimer
+
+TRANSITION:
+    S: EditTimeout.Running
+    N: EditTimeout.Running
+    E: resetEditTimeoutTimer
+
+TRANSITION:
+    S:  IncrementTimer.Idle
+    N:  IncrementTimer.Running
+    C:  [INSTATE("EditMode.True")]
+    E:  increase
+    O:  gui.increaseSelection()
+        gui.eventhandler.event("resetEditTimeoutTimer")
+
+TRANSITION:
+    S:  IncrementTimer.Running
+    N:  IncrementTimer.Running
+    T:  0.3
+    O:  gui.increaseSelection()
+        gui.eventhandler.event("resetEditTimeoutTimer")
+
+TRANSITION:
+    S: IncrementTimer.Running
+    N: IncrementTimer.Idle
+    E: stopInc
+
 # editTime
 # finishEdit
 # released
