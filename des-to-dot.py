@@ -1,9 +1,11 @@
 #!python
 
+import sys
+
 # Convert a statechart diagram from a .des file into a .dot file for
 # Graphviz so that the statechart can be visualised.
 
-filename = 'digitalwatch.des'
+filename = sys.argv[1]
 
 section = None  # maintain the state of reading the .des
 node = None  # what node are we processing now
