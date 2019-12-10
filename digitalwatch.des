@@ -19,6 +19,9 @@ STATECHART:
         On
         Wait
         Off [DS]
+    Display [DS]
+        Time [DS]
+        Chrono
 
 # TRANSITION: Yksittäinen tilasiirtymä
 #     S: A    Lähtötila
@@ -32,14 +35,14 @@ TRANSITION:
     S:  Clock.Running 
     N:  Clock.Running 
     T:  1
-    O:  gui.increaseTimeByOne()
+    O:  gui.GUI.increaseTimeByOne()
+
 
 TRANSITION:
     S:  Backlight.Off
     N:  Backlight.On
     E:  lightOn
     O:  gui.setIndiglo()
-
 
 TRANSITION:
     S:  Backlight.On
@@ -52,9 +55,30 @@ TRANSITION:
     T:  2 [OTT]
     O:  gui.unsetIndiglo()
 
+TRANSITION:
+    S:  Display.Time
+    N:  Display.Time
+    T: 1
+    O: gui.refreshTimeDisplay() 
 
-# lightOn
-# lightOff
+TRANSITION:
+    S: Display.Chrono
+    N: Display.Chrono
+    T: 0.25
+    O: gui.refreshChronoDisplay()
+
+TRANSITION:
+    S: Display.Time
+    N: Display.Chrono
+    E: changeMode
+    O: gui.refreshChronoDisplay()
+
+TRANSITION:
+    S: Display.Chrono
+    N: Display.Time
+    E: changeMode
+    O: gui.refreshTimeDisplay()
+
 # changeMode
 # initChrono
 # editTime
@@ -63,8 +87,6 @@ TRANSITION:
 # resetChrono
 # increase
 # setAlarm
-
 # stopInc
 # onoff
-
 # alarming
