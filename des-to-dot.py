@@ -28,7 +28,12 @@ with open(filename, 'r') as fh:
             source = destination = label = None
         elif section == 'statechart':
             if s.startswith(' ' * 8):
-                print(("  %s.%s" % (node, s.split()[0])).replace('.', '_'))
+                s = s.split()
+                if len(s) > 1 and s[1] == '[DS]':
+                    shape = 'doublecircle'
+                else:
+                    shape = 'circle'
+                print(("  %s.%s [shape=%s]" % (node, s[0], shape)).replace('.', '_'))
             elif s.startswith(' ' * 4):
                 node = s.split()[0]
         elif section == 'transition':
