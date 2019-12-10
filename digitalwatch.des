@@ -1,7 +1,7 @@
 INITIALIZER:
     from Tkinter import *
     from DWatchGUI import DWatchGUI
-    
+
     root = Tk()
     topLevel = Toplevel(root)
     topLevel.resizable(width="NO", height="NO")
@@ -47,8 +47,8 @@ STATECHART:
 
 
 TRANSITION:
-    S:  Clock.Running 
-    N:  Clock.Running 
+    S:  Clock.Running
+    N:  Clock.Running
     T:  1
     O:  gui.GUI.increaseTimeByOne()
 
@@ -83,7 +83,7 @@ TRANSITION:
     S:  Display.Time
     N:  Display.Time
     T:  0.25
-    O:  gui.refreshTimeDisplay() 
+    O:  gui.refreshTimeDisplay()
         gui.refreshDateDisplay()
 
 TRANSITION:
@@ -170,7 +170,7 @@ TRANSITION:
         gui.eventhandler.event("enterEditMode")
         gui.eventhandler.event("startEditTimeoutTimer")
 
-TRANSITION: 
+TRANSITION:
     S:  TimeEditTimer.Running
     N:  TimeEditTimer.Idle
     E:  released
@@ -205,7 +205,6 @@ TRANSITION:
     N: EditMode.False
     C: [INSTATE("Display.Time")]
     E: leaveEditMode
-
 
 TRANSITION:
     S: EditMode.True
@@ -275,6 +274,5 @@ TRANSITION:
     N: EnterAlarmEditTimer.Idle
     E: onoff
     O: gui.eventhandler.event("exitAlarmDisplay")
-    
 
 # alarming

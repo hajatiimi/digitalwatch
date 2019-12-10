@@ -47,7 +47,6 @@ digraph digitalwatch {
   EditExitTimer_Running -> EditExitTimer_Idle [label="E:released"]
   EditMode_False -> EditMode_True [label="E:enterEditMode"]
   EditMode_True -> EditMode_False [label="E:leaveEditMode"]
-  None -> None [label="None"]
   EditMode_True -> EditMode_False [label="E:leaveEditMode"]
   EditTimeout_Idle -> EditTimeout_Running [label="E:startEditTimeoutTimer"]
   EditTimeout_Running -> EditTimeout_Idle [label="T:5"]
@@ -59,5 +58,4 @@ digraph digitalwatch {
   EnterAlarmEditTimer_Idle -> EnterAlarmEditTimer_Running [label="E:startEnterAlarmEditTimer"]
   EnterAlarmEditTimer_Running -> EnterAlarmEditTimer_Idle [label="T:1_5"]
   EnterAlarmEditTimer_Running -> EnterAlarmEditTimer_Idle [label="E:onoff"]
-  None -> None [label="None"]
 }
