@@ -12,8 +12,9 @@ INITIALIZER:
     exit()
 
 STATECHART:
-    A [DS]
-    B
+    Clock [DS]
+        Running [DS]
+        Stopped
 
 # TRANSITION: Yksittäinen tilasiirtymä
 #     S: A    Lähtötila
@@ -24,16 +25,22 @@ STATECHART:
 # 
 
 TRANSITION:
-    S:  A
-    N:  B
+    S: Clock.Running 
+    N: Clock.Running 
+    T: 1
+    O: gui.increaseTimeByOne()
+
+TRANSITION:
+    S:  Clock
+    N:  Clock
     E:  lightOn
     O:  print "A -> B"
         gui.setIndiglo()
        
 
 TRANSITION:
-    S: B
-    N: A
+    S: Clock
+    N: Clock
     E: lightOff
     O:  print "B -> A"
         gui.unsetIndiglo()
