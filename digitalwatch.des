@@ -15,6 +15,9 @@ STATECHART:
     Clock [DS]
         Running [DS]
         Stopped
+    Chrono [DS]
+        Running
+        Stopped [DS]
     Backlight [DS]
         On
         Wait
@@ -79,7 +82,38 @@ TRANSITION:
     E: changeMode
     O: gui.refreshTimeDisplay()
 
-# changeMode
+TRANSITION:
+    S:  Chrono.Running
+    N:  Chrono.Running
+    T:  0.01
+    O:  gui.increaseChronoByOne()
+
+TRANSITION:
+    S:  Chrono.Stopped
+    N:  Chrono.Running
+    E:  initChrono
+    C:  [INSTATE("Display.Chrono")]
+
+TRANSITION:
+    S:  Chrono.Running
+    N:  Chrono.Stopped
+    E:  initChrono
+    C:  [INSTATE("Display.Chrono")]
+
+TRANSITION:
+    S:  Chrono.Running
+    N:  Chrono.Running
+    E:  resetChrono
+    C:  [INSTATE("Display.Chrono")]
+    O:  gui.resetChrono()
+
+TRANSITION:
+    S:  Chrono.Stopped
+    N:  Chrono.Stopped
+    E:  resetChrono
+    C:  [INSTATE("Display.Chrono")]
+    O:  gui.resetChrono()
+
 # initChrono
 # editTime
 # finishEdit
